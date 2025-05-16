@@ -35,8 +35,7 @@ export const Categories = ({ data }: Props) => {
 
   useEffect(() => {
     const calculateVisible = () => {
-      if (!containerRef.current || !measureRef.current || !viewAllRef.current)
-        return;
+      if (!containerRef.current || !measureRef.current || !viewAllRef.current) return;
 
       const containerWidth = containerRef.current.offsetWidth;
       const viewAllWidth = viewAllRef.current.offsetWidth;
@@ -74,7 +73,7 @@ export const Categories = ({ data }: Props) => {
       {/**Hidden items */}
       <div
         className="absolute opacity-0 pointer-events-none flex"
-        style={{ position: "fixed", top: -999, left: -999 }}
+        style={{ position: "fixed", top: -9999, left: -9999 }}
         ref={measureRef}
       >
         {data.map((category) => (
@@ -111,9 +110,7 @@ export const Categories = ({ data }: Props) => {
             onClick={() => setIsSidebarOpen(true)}
             className={cn(
               "h-11 px-4 bg-transparent border-transparent rounded-full hover:bg-white hover:border-primary text-black",
-              isActiveCategoryHidden &&
-                !isAnyHovered &&
-                "bg-white border-primary"
+              isActiveCategoryHidden && !isAnyHovered && "bg-white border-primary"
             )}
           >
             View All

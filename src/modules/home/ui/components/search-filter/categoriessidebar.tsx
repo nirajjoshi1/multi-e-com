@@ -25,17 +25,13 @@ interface Props {
 export const CategoriesSidebar = ({
   open,
   onOpenChangeAction,
-  // data
 }: Props) => {
   const router = useRouter();
   const trpc = useTRPC();
   const { data } = useSuspenseQuery(trpc.categories.getMany.queryOptions());
 
-  const [parentCategories, setParentCategories] = useState<
-    CategoriesGetManyOutput | null
-  >(null);
-  const [selectedCategory, setSelectedCategory] =
-    useState<CategoriesGetManyOutput[1] | null>(null);
+  const [parentCategories, setParentCategories] = useState<CategoriesGetManyOutput | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<CategoriesGetManyOutput[1] | null>(null);
 
   const currentCategories = parentCategories ?? data ?? [];
 
@@ -45,18 +41,18 @@ export const CategoriesSidebar = ({
     onOpenChangeAction(open);
   };
  
-  const handleCategoryCLick = (category: CategoriesGetManyOutput[1]) => {
+  const handleCategoryClick = (category: CategoriesGetManyOutput[1]) => {
     if (category.subcategories && category.subcategories.length > 0) {
       setParentCategories(category.subcategories as CategoriesGetManyOutput);
       setSelectedCategory(category);
     } else {
       if (parentCategories && selectedCategory) {
-        router.push(`${selectedCategory.slug}/${category.slug}`);
+        router.push(`/${selectedCategory.slug}/${category.slug}`);
       } else {
         if (category.slug === "all") {
           router.push("/");
         } else {  
-          router.push(`${category.slug}`);
+          router.push(`/${category.slug}`);
         }
       }
       handleOpenChange(false);
@@ -90,11 +86,11 @@ export const CategoriesSidebar = ({
               <ChevronLeftIcon className="size-4 mr-2 " />
               Back
             </button>
-          )}
+          )} 
           ;
           {currentCategories.map((category) => (
             <button
-              onClick={() => handleCategoryCLick(category)}
+              onClick={() => handleCategoryClick(category)}
               key={category.slug}
               className="w-full text-left p-4 hover:bg-black hover:text-white cursor-pointer flex justify-between items-center text-base font-medium"
             >
