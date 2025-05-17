@@ -6,7 +6,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function generateTenantUrl(tenantSlug:string){
-  if(process.env.NODE_ENV==="development"){
+  const isDevelopment = process.env.NODE_ENV==="development";
+  const isSubDomainRoutingEnabled=process.env.NEXT_PUBLIC_ENABLE_SUBDOMAIN_ROUTING==="true";
+  if(isDevelopment||!isSubDomainRoutingEnabled){
     return `${process.env.NEXT_PUBLIC_URL}/tenants/${tenantSlug}`;
   };
   const protocol = "https";
