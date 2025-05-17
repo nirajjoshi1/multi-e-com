@@ -50,8 +50,12 @@ const ReviewForm = ({ productId, initialData }: Props) => {
   );
   const updateReview = useMutation(
     trpc.reviews.update.mutationOptions({
-      onSuccess: () => {},
-      onError: () => {},
+      onSuccess: () => {
+        toast.success("Review updated successfully");
+      },
+      onError: () => {
+        toast.error("Error updating review");
+      },
     })
   );
 
