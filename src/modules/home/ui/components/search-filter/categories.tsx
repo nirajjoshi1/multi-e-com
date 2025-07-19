@@ -58,16 +58,23 @@ export const Categories = ({ data }: Props) => {
     };
 
     const resizeObserver = new ResizeObserver(calculateVisible);
-    resizeObserver.observe(containerRef.current!);
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
 
-    return () => resizeObserver.disconnect();
+    return () => {
+      resizeObserver.disconnect();
+    };
   }, [data.length]);
 
+  const handleSidebarClose = () => {
+    setIsSidebarOpen(false);
+  };
   return (
-    <div className="relative w-full " onClick={() => {}}>
+    <div className="relative w-full">
       <CategoriesSidebar
         open={isSidebarOpen}
-        onOpenChangeAction={setIsSidebarOpen}
+        onOpenChangeAction={handleSidebarClose}
       />
 
       {/**Hidden items */}

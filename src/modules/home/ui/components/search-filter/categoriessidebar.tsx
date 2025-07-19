@@ -30,25 +30,32 @@ export const CategoriesSidebar = ({
   const trpc = useTRPC();
   const { data } = useSuspenseQuery(trpc.categories.getMany.queryOptions());
 
-  const [parentCategories, setParentCategories] = useState<CategoriesGetManyOutput | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<CategoriesGetManyOutput[1] | null>(null);
+  const [viewingSubcategories, setViewingSubcategories] = useState<{
+    parentCategory: CategoriesGetManyOutput[1];
+    subcategories: CategoriesGetManyOutput;
+  } | null>(null);
 
-  const currentCategories = parentCategories ?? data ?? [];
+  const currentCategories = viewingSubcategories?.subcategories ?? data ?? [];
 
   const handleOpenChange = (open: boolean) => {
-    setSelectedCategory(null);
-    setParentCategories(null);
+    setViewingSubcategories(null);
     onOpenChangeAction(open);
   };
  
   const handleCategoryClick = (category: CategoriesGetManyOutput[1]) => {
     if (category.subcategories && category.subcategories.length > 0) {
-      setParentCategories(category.subcategories as CategoriesGetManyOutput);
-      setSelectedCategory(category);
+      // Show subcategories
+      setViewingSubcategories({
+        parentCategory: category,
+        subcategories: category.subcategories as CategoriesGetManyOutput,
+      });
     } else {
-      if (parentCategories && selectedCategory) {
-        router.push(`/${selectedCategory.slug}/${category.slug}`);
+      // Navigate to category/subcategory
+      if (viewingSubcategories) {
+        // This is a subcategory click
+        router.push(`/${viewingSubcategories.parentCategory.slug}/${category.slug}`);
       } else {
+        // This is a main category click
         if (category.slug === "all") {
           router.push("/");
         } else {  
@@ -60,13 +67,11 @@ export const CategoriesSidebar = ({
   };
 
   const handleBackClick = () => {
-    if (parentCategories) {
-      setParentCategories(null);
-      setSelectedCategory(null);
-    }
+    setViewingSubcategories(null);
   };
 
-  const backgroundColor = selectedCategory?.color || "white";
+  const backgroundColor = viewingSubcategories?.parentCategory?.color || "white";
+  
   return (
     <Sheet open={open} onOpenChange={handleOpenChange}>
       <SheetContent
@@ -75,10 +80,15 @@ export const CategoriesSidebar = ({
         style={{ backgroundColor }}
       >
         <SheetHeader className="p-4 border-b">
-          <SheetTitle>Categories</SheetTitle>
+          <SheetTitle>
+            {viewingSubcategories 
+              ? viewingSubcategories.parentCategory.name 
+              : "Categories"
+            }
+          </SheetTitle>
         </SheetHeader>
         <ScrollArea className="flex flex-col overflow-y-auto h-full pb-2">
-          {parentCategories && (
+          {viewingSubcategories && (
             <button
               onClick={handleBackClick}
               className="w-full text-left p-4 cursor-pointer hover:bg-black hover:text-white flex items-center text-base font-medium"

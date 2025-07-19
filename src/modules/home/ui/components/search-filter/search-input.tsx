@@ -29,10 +29,13 @@ export const SearchInput = ({ disabled,defaultValue,onChange }: Props) => {
     };
   }, [searchValue, onChange]);
   return (
+  const handleSidebarClose = () => {
+    setIsSidebarOpen(false);
+  };
     <div className="flex items-center gap-2 w-full ">
       <CategoriesSidebar
         open={isSidebarOpen}
-        onOpenChangeAction={setIsSidebarOpen}
+        onOpenChangeAction={handleSidebarClose}
       />
       <div className="relative w-full ">
         <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-neutral-500" />
