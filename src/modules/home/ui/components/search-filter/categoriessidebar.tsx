@@ -86,8 +86,7 @@ export const CategoriesSidebar = ({
               <ChevronLeftIcon className="size-4 mr-2 " />
               Back
             </button>
-          )} 
-          ;
+          )}
           {currentCategories.map((category) => (
             <button
               onClick={() => handleCategoryClick(category)}
@@ -98,6 +97,8 @@ export const CategoriesSidebar = ({
               {category.subcategories && category.subcategories.length > 0 && (
                 <ChevronRightIcon className="size-4 " />
               )}
+            </button>
+          ))}
         </ScrollArea>
       </SheetContent>
     </Sheet>
