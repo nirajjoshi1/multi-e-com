@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { SubCategoryMenu } from "./subcategorymenu";
 import Link from "next/link";
 import { CategoriesGetManyOutput } from "@/modules/categories/types";
+import { useRouter } from "next/navigation";
 
 interface Props {
   category: CategoriesGetManyOutput[1];
@@ -19,6 +20,7 @@ export const CategoryDropdown = ({
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   const onMouseEnter = () => {
     if (category.subcategories) {
@@ -30,27 +32,35 @@ export const CategoryDropdown = ({
     setIsOpen(false);
   };
 
+  const handleCategoryClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (category.slug === "all") {
+      router.push("/");
+    } else {
+      router.push(`/${category.slug}`);
+    }
+    setIsOpen(false);
+  };
+
   return (
     <div
       ref={dropdownRef}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      className="relative" // Set this as the positioning context
+      className="relative"
     >
       <div className="relative">
-        <Link href={`/${category.slug === "all" ? "" : category.slug}`}>
-          <Button
-            className={cn(
-              "h-11 px-4 bg-transparent border-transparent rounded-full hover:bg-white hover:border-primary text-black",
-              isActive && !isNavigationHovered && "bg-white border-primary",
-              isOpen &&
-                "bg-white border-primary shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] -translate-x-[4px] -translate-y-[4px]"
-            )}
-          >
-            {category.name}
-          </Button>
-        </Link>
-
+        <Button
+          onClick={handleCategoryClick}
+          className={cn(
+            "h-11 px-4 bg-transparent border-transparent rounded-full hover:bg-white hover:border-primary text-black",
+            isActive && !isNavigationHovered && "bg-white border-primary",
+            isOpen &&
+              "bg-white border-primary shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] -translate-x-[4px] -translate-y-[4px]"
+          )}
+        >
+          {category.name}
+        </Button>
         {category.subcategories && category.subcategories.length > 0 && (
           <div
             className={cn(
@@ -60,8 +70,7 @@ export const CategoryDropdown = ({
           />
         )}
       </div>
-
-      <SubCategoryMenu category={category} isOpen={isOpen} />
+      <SubCategoryMenu category={category} isOpen={isOpen} onNavigate={() => setIsOpen(false)} />
     </div>
   );
 };

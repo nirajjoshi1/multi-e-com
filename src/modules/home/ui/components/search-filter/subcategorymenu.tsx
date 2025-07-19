@@ -2,13 +2,16 @@
 import Link from "next/link";
 import { CategoriesGetManyOutput } from "@/modules/categories/types";
 import { Category } from "@/payload-types";
+import { useRouter } from "next/navigation";
 
 interface Props {
   category: CategoriesGetManyOutput[1];
   isOpen: boolean;
+  onNavigate?: () => void;
 }
 
-export const SubCategoryMenu = ({ category, isOpen }: Props) => {
+export const SubCategoryMenu = ({ category, isOpen, onNavigate }: Props) => {
+  const router = useRouter();
   if (
     !isOpen ||
     !category.subcategories ||
@@ -18,6 +21,11 @@ export const SubCategoryMenu = ({ category, isOpen }: Props) => {
   }
 
   const backgroundColor = category.color || "#f5f5f5";
+
+  const handleSubcategoryClick = (subcategorySlug: string) => {
+    router.push(`/${category.slug}/${subcategorySlug}`);
+    if (onNavigate) onNavigate();
+  };
 
   return (
     <div
@@ -37,13 +45,13 @@ export const SubCategoryMenu = ({ category, isOpen }: Props) => {
       >
         <div>
           {category.subcategories?.map((subcategory: Category) => (
-            <Link
+            <button
               key={subcategory.slug}
-              href={`/${category.slug}/${subcategory.slug}`}
+              onClick={() => handleSubcategoryClick(subcategory.slug)}
               className="w-full text-left p-4 hover:bg-black hover:text-white flex justify-between items-center underline font-medium"
             >
               {subcategory.name}
-            </Link>
+            </button>
           ))}
         </div>
       </div>
