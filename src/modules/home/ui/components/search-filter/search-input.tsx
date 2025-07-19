@@ -10,26 +10,30 @@ import Link from "next/link";
 
 interface Props {
   disabled?: boolean;
-  defaultValue?: string|undefined;
-  onChange?:(value:string)=>void;
-
+  defaultValue?: string | undefined;
+  onChange?: (value: string) => void;
 }
 export const SearchInput = ({ disabled,defaultValue,onChange }: Props) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const trpc = useTRPC();
   const session = useQuery(trpc.auth.session.queryOptions());
-  const [searchValue,setSearchValue] = useState(defaultValue||"");
+  const [searchValue, setSearchValue] = useState(defaultValue || "");
 
-  useEffect(()=>{
+  useEffect(() => {
     const timeoutId = setTimeout(() => {
-onChange?.(searchValue)
-    },500);
+      onChange?.(searchValue);
+    }, 500);
 
-    return () => {clearTimeout(timeoutId)}
-  },[searchValue,onChange])
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [searchValue, onChange]);
   return (
     <div className="flex items-center gap-2 w-full ">
-      <CategoriesSidebar open={isSidebarOpen} onOpenChangeAction={setIsSidebarOpen} />
+      <CategoriesSidebar
+        open={isSidebarOpen}
+        onOpenChangeAction={setIsSidebarOpen}
+      />
       <div className="relative w-full ">
         <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-neutral-500" />
         <Input
@@ -37,7 +41,7 @@ onChange?.(searchValue)
           placeholder="Search Products"
           disabled={disabled}
           value={searchValue}
-          onChange={(e)=> setSearchValue(e.target.value)}
+          onChange={(e) => setSearchValue(e.target.value)}
         />
       </div>
       <Button
@@ -49,7 +53,7 @@ onChange?.(searchValue)
       </Button>
       {session.data?.user && (
         <Button asChild variant={"elevated"}>
-          <Link prefetch   href={"/library"}>
+          <Link prefetch href={"/library"}>
             <BookmarkCheckIcon />
             Library
           </Link>

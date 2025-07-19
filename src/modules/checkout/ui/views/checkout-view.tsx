@@ -28,32 +28,35 @@ export const CheckoutView = ({ tenantSlug }: CheckoutViewProps) => {
   const { data, error, isLoading } = useQuery(
     trpc.checkout.getProducts.queryOptions({
       ids: productIds,
-    }));
+    })
+  );
 
-    const purchase = useMutation(trpc.checkout.purchase.mutationOptions({
-      onMutate:()=>{
-        setStates({success:false, cancel:false});
+  const purchase = useMutation(
+    trpc.checkout.purchase.mutationOptions({
+      onMutate: () => {
+        setStates({ success: false, cancel: false });
       },
-      onSuccess: (data)=>{
+      onSuccess: (data) => {
         window.location.href = data.url;
       },
-      onError:(err)=>{
-     if(err.data?.code==="UNAUTHORIZED"){
-      //Todo: modify when subdomains enabled  
-      router.push("/sign-in")
-     };
-     toast.error(err.message)
+      onError: (err) => {
+        if (err.data?.code === "UNAUTHORIZED") {
+          //Todo: modify when subdomains enabled
+          router.push("/sign-in");
+        }
+        toast.error(err.message);
       },
-    }));
+    })
+  );
 
-   useEffect (()=>{
-    if(states.success){
-      setStates({success:false, cancel:false});
+  useEffect(() => {
+    if (states.success) {
+      setStates({ success: false, cancel: false });
       clearCart();
       queryClient.invalidateQueries(trpc.library.getMany.infiniteQueryFilter());
       router.push("/library");
     }
-   },[states.success,clearCart, router, setStates, queryClient, trpc.library.getMany]);
+  }, [states.success, clearCart, router, setStates, queryClient, trpc.library.getMany]);
 
 
   useEffect(() => {
@@ -106,7 +109,7 @@ export const CheckoutView = ({ tenantSlug }: CheckoutViewProps) => {
         <div className="lg:col-span-3 ">
           <CheckoutSideBar
             total={data?.totalPrice || 0}
-            onPurchase={() => purchase.mutate({tenantSlug,productIds})}
+            onPurchase={() => purchase.mutate({ tenantSlug, productIds })}
             isCanceled={states.cancel}
             disabled={purchase.isPending}
           />

@@ -1,17 +1,17 @@
-import {create} from "zustand";
-import {createJSONStorage, persist} from "zustand/middleware";
+import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 
-interface TenantCart{
-    productIds: string[];
-};
+interface TenantCart {
+  productIds: string[];
+}
 
-interface CartState{
-    tenantCarts:Record<string,TenantCart>;
-    addProduct:(tenantSlug:string,productId:string)=>void;
-    removeProduct:(tenantSlug:string,productId:string)=>void;
-    clearCart: (tenantSlug:string)=>void;
-    clearAllCarts: ()=>void;
-};
+interface CartState {
+  tenantCarts: Record<string, TenantCart>;
+  addProduct: (tenantSlug: string, productId: string) => void;
+  removeProduct: (tenantSlug: string, productId: string) => void;
+  clearCart: (tenantSlug: string) => void;
+  clearAllCarts: () => void;
+}
 
 export const useCartStore = create<CartState>()(
   persist(
@@ -35,7 +35,7 @@ export const useCartStore = create<CartState>()(
             ...state.tenantCarts,
             [tenantSlug]: {
               productIds: state.tenantCarts[tenantSlug]?.productIds.filter(
-                (id)=>id!==productId
+                (id) => id !== productId
               ) || [],
             },
           },
@@ -45,13 +45,13 @@ export const useCartStore = create<CartState>()(
           tenantCarts: {
             ...state.tenantCarts,
             [tenantSlug]: {
-              productIds:[],
+              productIds: [],
             },
           },
         })),
       clearAllCarts: () =>
         set({
-            tenantCarts:{},
+          tenantCarts: {},
         }),
     }),
     {

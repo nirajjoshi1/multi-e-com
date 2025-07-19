@@ -1,13 +1,13 @@
 
 import Link from "next/link";
-import {Poppins} from "next/font/google";
+import { Poppins } from "next/font/google";
 
-import {cn} from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 const poppins = Poppins({
-    subsets:["latin"],
-    weight:["700"]
-})
+  subsets: ["latin"],
+  weight: ["700"],
+});
 
 export const Footer = () => {
   return (

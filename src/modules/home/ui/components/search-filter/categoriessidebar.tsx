@@ -98,8 +98,6 @@ export const CategoriesSidebar = ({
               {category.subcategories && category.subcategories.length > 0 && (
                 <ChevronRightIcon className="size-4 " />
               )}
-            </button>
-          ))}
         </ScrollArea>
       </SheetContent>
     </Sheet>

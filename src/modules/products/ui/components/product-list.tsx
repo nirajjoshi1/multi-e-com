@@ -72,7 +72,7 @@ export const ProductList = ({ category,tenantSlug,narrowView }: Props) => {
         {hasNextPage && (
           <Button
             disabled={isFetchingNextPage}
-            onClick={() => fetchNextPage}
+            onClick={() => fetchNextPage()}
             className="font-medium disabled:opacity-50 text-base bg-white "
             variant={"elevated"}
           >
