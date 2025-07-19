@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 import { CategoriesGetManyOutput } from "@/modules/categories/types";
 import { Category } from "@/payload-types";
 import { useRouter } from "next/navigation";
