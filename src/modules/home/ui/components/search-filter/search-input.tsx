@@ -6,6 +6,7 @@ import { CategoriesSidebar } from "./categoriessidebar";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
+import Link from "next/link";
 
 interface Props {
   disabled?: boolean;

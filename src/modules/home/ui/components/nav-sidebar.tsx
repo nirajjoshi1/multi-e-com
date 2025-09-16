@@ -7,6 +7,9 @@ import {
 } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import { useTRPC } from "@/trpc/client";
+import { Button } from "@/components/ui/button";
 
 
 interface NavbarItem {
@@ -20,6 +23,9 @@ interface Props {
   onOpenChange: (open: boolean) => void;
 }
 export const NavbarSidebar = ({ items, open, onOpenChange }: Props) => {
+  const trpc = useTRPC();
+  const session = useQuery(trpc.auth.session.queryOptions());
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side={"left"} className="p-0 transition-none ">
@@ -40,20 +46,41 @@ export const NavbarSidebar = ({ items, open, onOpenChange }: Props) => {
             </Link>
           ))}
           <div className=" border-t-slate-800 border-t">
-            <Link
-              href={"/sign-in"}
-              className="w-full text-left p-4 hover:bg-black hover:text-white flex items-center text-base font-medium "
-              onClick={() => onOpenChange(false)}
-            >
-              Log in
-            </Link>
-            <Link
-              href={"/sign-up"}
-              className="w-full text-left p-4 hover:bg-black hover:text-white flex items-center text-base font-medium "
-              onClick={() => onOpenChange(false)}
-            >
-              Start selling
-            </Link>
+            {session.data?.user ? (
+              <>
+                <Link
+                  href={"/library"}
+                  className="w-full text-left p-4 hover:bg-black hover:text-white flex items-center text-base font-medium "
+                  onClick={() => onOpenChange(false)}
+                >
+                  Library
+                </Link>
+                <Link
+                  href={"/admin"}
+                  className="w-full text-left p-4 hover:bg-black hover:text-white flex items-center text-base font-medium "
+                  onClick={() => onOpenChange(false)}
+                >
+                  Dashboard
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  href={"/sign-in"}
+                  className="w-full text-left p-4 hover:bg-black hover:text-white flex items-center text-base font-medium "
+                  onClick={() => onOpenChange(false)}
+                >
+                  Log in
+                </Link>
+                <Link
+                  href={"/sign-up"}
+                  className="w-full text-left p-4 hover:bg-black hover:text-white flex items-center text-base font-medium "
+                  onClick={() => onOpenChange(false)}
+                >
+                  Start selling
+                </Link>
+              </>
+            )}
           </div>
         </ScrollArea>
       </SheetContent>

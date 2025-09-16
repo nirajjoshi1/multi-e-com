@@ -3,7 +3,6 @@ import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { SubCategoryMenu } from "./subcategorymenu";
-import Link from "next/link";
 import { CategoriesGetManyOutput } from "@/modules/categories/types";
 import { useRouter } from "next/navigation";
 
@@ -34,6 +33,7 @@ export const CategoryDropdown = ({
 
   const handleCategoryClick = (e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     if (category.slug === "all") {
       router.push("/");
     } else {
@@ -51,6 +51,7 @@ export const CategoryDropdown = ({
     >
       <div className="relative">
         <Button
+          variant="elevated"
           onClick={handleCategoryClick}
           className={cn(
             "h-11 px-4 bg-transparent border-transparent rounded-full hover:bg-white hover:border-primary text-black",

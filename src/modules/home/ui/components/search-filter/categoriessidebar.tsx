@@ -70,6 +70,12 @@ export const CategoriesSidebar = ({
     setViewingSubcategories(null);
   };
 
+  // Add "All" category to the main categories if not present
+  const categoriesWithAll = data && !data.find(cat => cat.slug === "all") 
+    ? [{ id: "all", name: "All", slug: "all", color: "#F5F5F5", subcategories: [], updatedAt: "", createdAt: "" }, ...data]
+    : data || [];
+
+  const displayCategories = viewingSubcategories?.subcategories ?? categoriesWithAll;
   const backgroundColor = viewingSubcategories?.parentCategory?.color || "white";
   
   return (
@@ -97,7 +103,7 @@ export const CategoriesSidebar = ({
               Back
             </button>
           )}
-          {currentCategories.map((category) => (
+          {displayCategories.map((category) => (
             <button
               onClick={() => handleCategoryClick(category)}
               key={category.slug}

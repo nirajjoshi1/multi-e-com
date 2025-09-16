@@ -25,6 +25,7 @@ export const Categories = ({ data }: Props) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const categoryParam = params.category as string | undefined;
+  const subcategoryParam = params.subcategory as string | undefined;
 
   const activeCategory = categoryParam || "all";
   const activeCategoryIndex = data.findIndex(
@@ -33,6 +34,10 @@ export const Categories = ({ data }: Props) => {
   const isActiveCategoryHidden =
     activeCategoryIndex >= visibleCount && activeCategoryIndex !== -1;
 
+  // Check if active subcategory is hidden
+  const isActiveSubcategoryHidden = subcategoryParam && activeCategoryIndex !== -1 
+    ? !data[activeCategoryIndex]?.subcategories?.some(sub => sub.slug === subcategoryParam)
+    : false;
   useEffect(() => {
     const calculateVisible = () => {
       if (!containerRef.current || !measureRef.current || !viewAllRef.current) return;
@@ -62,6 +67,8 @@ export const Categories = ({ data }: Props) => {
       resizeObserver.observe(containerRef.current);
     }
 
+    // Initial calculation
+    calculateVisible();
     return () => {
       resizeObserver.disconnect();
     };
@@ -117,7 +124,7 @@ export const Categories = ({ data }: Props) => {
             onClick={() => setIsSidebarOpen(true)}
             className={cn(
               "h-11 px-4 bg-transparent border-transparent rounded-full hover:bg-white hover:border-primary text-black",
-              isActiveCategoryHidden && !isAnyHovered && "bg-white border-primary"
+              (isActiveCategoryHidden || isActiveSubcategoryHidden) && !isAnyHovered && "bg-white border-primary"
             )}
           >
             View All

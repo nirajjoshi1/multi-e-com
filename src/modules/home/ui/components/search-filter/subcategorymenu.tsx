@@ -40,14 +40,14 @@ export const SubCategoryMenu = ({ category, isOpen, onNavigate }: Props) => {
 
       <div
         style={{ backgroundColor }}
-        className="w-60 text-black rounded-md overflow-hidden border shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] -translate-x-[2px] -translate-y-[2px]"
+        className="w-60 text-black rounded-md overflow-hidden border shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] -translate-x-[2px] -translate-y-[2px] max-h-80 overflow-y-auto"
       >
         <div>
           {category.subcategories?.map((subcategory: Category) => (
             <button
               key={subcategory.slug}
               onClick={() => handleSubcategoryClick(subcategory.slug)}
-              className="w-full text-left p-4 hover:bg-black hover:text-white flex justify-between items-center underline font-medium"
+              className="w-full text-left p-4 hover:bg-black hover:text-white flex justify-between items-center underline font-medium transition-colors duration-200"
             >
               {subcategory.name}
             </button>

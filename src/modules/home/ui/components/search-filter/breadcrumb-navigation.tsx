@@ -21,7 +21,7 @@ const BreadcrumbNavigation = ({
 }: Props) => {
   if (!activeCategoryName || activeCategory === "all") return null;
   return (
-    <Breadcrumb>
+    <Breadcrumb className="mt-2">
       <BreadcrumbList>
         {activeSubCategoryName ? (
           <>
